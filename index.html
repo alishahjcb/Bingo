@@ -46,14 +46,32 @@
 
     <script>
         function mineCoin() {
-            alert("You mined 1 Bingo Coin!");
-            // TODO: Connect this to the bot API
+            fetch("https://api.telegram.org/bot8150140919:AAESPIJzz7s0QGgH_zwkS6czpLiqyNoUk78/sendMessage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chat_id: "YOUR_CHAT_ID",
+                    text: "/mine"
+                })
+            })
+            .then(response => response.json())
+            .then(data => alert("You mined 1 Bingo Coin!"))
+            .catch(error => console.error("Error:", error));
         }
 
         function loadLeaderboard() {
-            const leaderboard = document.getElementById("leaderboard");
-            leaderboard.innerHTML = "<li>1. Player A - 100 coins</li><li>2. Player B - 80 coins</li>";
-            // TODO: Fetch real data from the bot API
+            fetch("https://alishahjcb.github.io/Bingo/leaderboard.json")
+            .then(response => response.json())
+            .then(data => {
+                const leaderboard = document.getElementById("leaderboard");
+                leaderboard.innerHTML = "";
+                data.forEach((player, index) => {
+                    leaderboard.innerHTML += `<li>${index + 1}. ${player.name} - ${player.coins} coins</li>`;
+                });
+            })
+            .catch(error => console.error("Error loading leaderboard:", error));
         }
 
         loadLeaderboard();
